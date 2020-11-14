@@ -4,7 +4,13 @@ import vuetify from './plugins/vuetify';
 
 Vue.config.productionTip = false
 
-new Vue({
-  vuetify,
-  render: h => h(App)
-}).$mount('#app')
+window.onload = () => {
+window.languagePluginLoader.then(() => {
+  window.pyodide.loadPackage(['numpy', 'matplotlib']).then(() => {
+    new Vue({
+      vuetify,
+      render: h => h(App)
+    }).$mount('#app')
+  })
+});
+}
