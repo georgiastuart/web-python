@@ -35,7 +35,7 @@ name: "Editor",
   },
   data: () => ({
     code: 'import numpy as np\n' +
-        'np.random.randn(5)',
+        'print(np.ones((2, 2))',
     lineNumbers: true,
     output: ""
   }),
@@ -44,7 +44,19 @@ name: "Editor",
       return highlight(code, languages.python)
     },
     runPython(code) {
-      this.output = window.pyodide.runPython(code);
+      console.log(code)
+      code += '\n'
+      let indentedCode = '';
+      let i = 0;
+      let j = 0;
+
+      while ((j = code.indexOf('\n', i)) != -1) {
+        indentedCode += '    ' + code.substring(i, j) + '\n';
+        i = j + 1;
+      }
+      console.log(indentedCode);
+      let preamble = 'from contextlib import redirect_stdout\nimport io\nf=io.StringIO()\nwith redirect_stdout(f):\n';
+      this.output = window.pyodide.runPython(preamble + indentedCode + 'f.getvalue()');
     }
   }
 }
